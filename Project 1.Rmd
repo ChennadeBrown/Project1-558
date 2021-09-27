@@ -1,0 +1,12 @@
+---
+title: "Project 1-API-Vignette"
+author: "Chennade Brown"
+date: "9/26/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Practice Today is going good.  Today.
