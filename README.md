@@ -45,7 +45,7 @@ getCountry
 ```
 
     ## Response [https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 00:54
+    ##   Date: 2021-10-01 01:06
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.56 kB
@@ -56,7 +56,7 @@ getCountry2
 ```
 
     ## Response [https://api.covid19api.com/country/Norway/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 00:54
+    ##   Date: 2021-10-01 01:06
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.39 kB
@@ -158,3 +158,5 @@ Combo
     ##  9 Switzerland CH          46.82 8.23    374 confirmed 2020-03-09T00:00:00Z
     ## 10 Switzerland CH          46.82 8.23    491 confirmed 2020-03-10T00:00:00Z
     ## # ... with 54 more rows
+
+\`\`\`
