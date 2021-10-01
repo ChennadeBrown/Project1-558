@@ -1,20 +1,23 @@
 
--   [Interacting with API’s Vignette: Example with the Covid19
-    API.](#interacting-with-apis-vignette-example-with-the-covid19-api)
-    -   [Packages Required](#packages-required)
+-   [Introduction](#introduction)
+-   [Packages Required](#packages-required)
+-   [Accessing the Data](#accessing-the-data)
+-   [Data Analysis](#data-analysis)
 
-# Interacting with API’s Vignette: Example with the Covid19 API.
+# Introduction
 
 This vignette will go through the steps of reading and summarizing data
 from an API. We will utilize the Covid19 API.
 
-## Packages Required
+# Packages Required
 
 The following packages were used to utilize the functions needed for
 interacting with the API and manipulating the retrieved data:  
 \* `httr`: Used to retrieve data from APIs.  
 \* `jsonlite`: Functions used to manipulate JSON data.  
-\* `tidyverse`: Functions used to get manipulate and reshape data.
+\* `tidyverse`: Functions used to get manipulate and reshape data. \*
+`dplyr`: Function that contains a set of tools for manipulating data in
+R.
 
 ``` r
 library(httr)
@@ -23,7 +26,7 @@ library(tidyverse)
 library(dplyr)
 ```
 
-### Accessing the Data
+# Accessing the Data
 
 First we will access data from the API regarding confirmed Covid 19
 Cases for Norway and Switzerland during the time frame from March 1,
@@ -39,7 +42,7 @@ getCountry
 ```
 
     ## Response [https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 21:57
+    ##   Date: 2021-10-01 22:26
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.56 kB
@@ -50,7 +53,7 @@ getCountry2
 ```
 
     ## Response [https://api.covid19api.com/country/Norway/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 21:57
+    ##   Date: 2021-10-01 22:26
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.39 kB
@@ -153,6 +156,8 @@ Combo
     ## 10 Switzerland CH          46.82 8.23    491 confirmed 2020-03-10T00:00:00Z
     ## # ... with 54 more rows
 
+# Data Analysis
+
 We will create a contingency table that shows the occurrences of
 confirmed cases between March - April 2020. Each country had a confirmed
 case during this time frame.
@@ -184,4 +189,19 @@ geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirm
 Cases(.data = Combo, x = "Cases", y = "Country")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- --> The
+following code calculates numerical summaries for daily cases confirmed
+for the two countries. The mean case count per day for Norway was 1,759
+cases and the mean case count per day for Switzerland was 5,402 cases.
+
+``` r
+Combo %>%
+  group_by(Country) %>%
+  summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR =    IQR(Cases))
+```
+
+    ## # A tibble: 2 x 5
+    ##   Country       Avg    Sd Median   IQR
+    ##   <chr>       <dbl> <dbl>  <dbl> <dbl>
+    ## 1 Norway      1760. 1590.   1398 2720.
+    ## 2 Switzerland 5402. 5967.   2450 9767.
