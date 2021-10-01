@@ -2,13 +2,74 @@
 title: "Project 1-API-Vignette"
 author: "Chennade Brown"
 date: "9/26/2021"
-output: github_document
----
+output:
+  github_document
+    code_folding: show
+    default_print: tibble
+--
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Practice Today is going good.  Today.
+# Interacting with API's Vignette: Example with the Covid19 API.
+This vignette will go through the steps of reading and summarizing data from an API. We will utilize the Covid19 API.
 
-Today is Thursday.
+## Packages Required 
+The following packages were used to utilize the functions needed for interacting with the API and manipulating the retrieved data:  
+* `httr`: Used to retrieve data from APIs.   
+* `jsonlite`: Functions used to manipulate JSON data.  
+* `tidyverse`: Functions used to get manipulate and reshape data.  
+
+```{r, echo = TRUE, results = 'hide', message = FALSE}
+library(httr)
+library(jsonlite)
+library(tidyverse)
+library(dplyr)
+```
+
+### Accessing the Data
+First we will access data from the API regarding confirmed Covid 19 Cases for Norway and Switzerland during the time frame from March 1, 2020 - April 1, 2020 for comparison.  This will be achieved using the GET function from the `httr` package to return information from the API.
+```{r, echo = TRUE}
+getCountry <- GET("https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z")
+
+getCountry2 <- GET("https://api.covid19api.com/country/Norway/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z")
+
+getCountry
+getCountry2
+```
+
+We will now review the contents of the returned data. The content function with the text parameter converts the raw data to JSON.
+```{r, echo = TRUE}
+getCountryText <- content(getCountry, "text")
+getCountryText2 <- content(getCountry2, "text")
+getCountryText
+getCountryText2
+```
+
+We will now covert the raw data into JSON format which will allow us to PARSE the data and output a data frame using the jsonlite package that was previously installed.
+```{r, echo = TRUE}
+getCountryJs <- fromJSON(getCountryText, flatten = TRUE)
+getCountryJs2 <- fromJSON(getCountryText2, flatten = TRUE)
+```
+
+We will convert the parsed JSON data for Norway & Switzerland into a tibble for our analysis.
+```{r, echo = TRUE}
+getCountryJsTb <- as_tibble(getCountryJs)
+getCountryJsTb
+```
+
+```{r, echo = TRUE}
+getCountryJs2Tb <- as_tibble(getCountryJs2)
+getCountryJs2Tb
+```
+
+We will now combine the data for Norway and Switzerland into one data frame using the rbind function and remove the empty columns Province, City, & CityCode.
+```{r, echo = TRUE}
+NorSwiz <- function(df1, df2) {rbind(df1, df2)}
+Combo <- NorSwiz(df1 = getCountryJsTb, df2 = getCountryJs2Tb)
+Combo$Province <- NULL
+Combo$City <- NULL
+Combo$CityCode <- NULL
+Combo
+```
