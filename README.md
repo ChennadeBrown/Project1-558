@@ -1,13 +1,7 @@
 
-|                                 |
-|---------------------------------|
-| title: “Project 1-API-Vignette” |
-| author: “Chennade Brown”        |
-| date: “9/26/2021”               |
-| output:                         |
-| github\_document                |
-| code\_folding: show             |
-| default\_print: tibble          |
+-   [Interacting with API’s Vignette: Example with the Covid19
+    API.](#interacting-with-apis-vignette-example-with-the-covid19-api)
+    -   [Packages Required](#packages-required)
 
 # Interacting with API’s Vignette: Example with the Covid19 API.
 
@@ -45,7 +39,7 @@ getCountry
 ```
 
     ## Response [https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 01:10
+    ##   Date: 2021-10-01 21:50
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.56 kB
@@ -56,7 +50,7 @@ getCountry2
 ```
 
     ## Response [https://api.covid19api.com/country/Norway/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 01:10
+    ##   Date: 2021-10-01 21:50
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.39 kB
