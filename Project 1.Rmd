@@ -72,6 +72,24 @@ Combo$City <- NULL
 Combo$CityCode <- NULL
 Combo
 ```
+We will create a contingency table that shows the occurrences of confirmed cases  between March - April 2020.  Each country had a confirmed case during this time frame.
+```{r, echo = TRUE}
+x <- c('Country')
+y <- c('Status')
+TwoWay <- function(x, y){
+  tbl <- table(Combo[[x]], Combo[[y]])
+return(tbl)}
+TwoWay(x = "Country", y = "Status")
+```
+
+Below is a box plot representing confirmed cases in Norway and Switzerland between March - April 2020.  The output shows that Switzerland had a higher number of confirmed cases.
+```{r, echo = TRUE}
+x <- c("Cases")
+y <- c("Country")
+Cases <- function(.data, x, y){
+ggplot(.data, aes(x = .data[[x]], y = .data[[y]])) +
+geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirmed Cases")}
+Cases(.data = Combo, x = "Cases", y = "Country")
 
 ```
 

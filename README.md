@@ -45,7 +45,7 @@ getCountry
 ```
 
     ## Response [https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 01:06
+    ##   Date: 2021-10-01 01:10
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.56 kB
@@ -56,7 +56,7 @@ getCountry2
 ```
 
     ## Response [https://api.covid19api.com/country/Norway/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z]
-    ##   Date: 2021-10-01 01:06
+    ##   Date: 2021-10-01 01:10
     ##   Status: 200
     ##   Content-Type: application/json; charset=UTF-8
     ##   Size: 5.39 kB
@@ -159,4 +159,35 @@ Combo
     ## 10 Switzerland CH          46.82 8.23    491 confirmed 2020-03-10T00:00:00Z
     ## # ... with 54 more rows
 
-\`\`\`
+We will create a contingency table that shows the occurrences of
+confirmed cases between March - April 2020. Each country had a confirmed
+case during this time frame.
+
+``` r
+x <- c('Country')
+y <- c('Status')
+TwoWay <- function(x, y){
+  tbl <- table(Combo[[x]], Combo[[y]])
+return(tbl)}
+TwoWay(x = "Country", y = "Status")
+```
+
+    ##              
+    ##               confirmed
+    ##   Norway             32
+    ##   Switzerland        32
+
+Below is a box plot representing confirmed cases in Norway and
+Switzerland between March - April 2020. The output shows that
+Switzerland had a higher number of confirmed cases.
+
+``` r
+x <- c("Cases")
+y <- c("Country")
+Cases <- function(.data, x, y){
+ggplot(.data, aes(x = .data[[x]], y = .data[[y]])) +
+geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirmed Cases")}
+Cases(.data = Combo, x = "Cases", y = "Country")
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
