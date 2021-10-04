@@ -62,6 +62,7 @@ Combo <- NorSwiz(df1 = getCountryJsTb, df2 = getCountryJs2Tb)
 Combo$Province <- NULL
 Combo$City <- NULL
 Combo$CityCode <- NULL
+Combo
 ```
 
 The following functions will allow the user to query the Norway and Switzerland API by entering the column names or all.  To subset by rows the user can enter observations for the filter function.
@@ -82,7 +83,7 @@ ConfirmedNor <- function(type = "all"){
 ConfirmedNor("CountryCode")
 ```
 
-The following functions returns  data for Africa & Mexico from the first recorded case. We will go through the same steps outlined above to retrieve and parse the data from the API.
+The following functions returns  data for South Africa & Mexico from the first recorded case. We will go through the same steps outlined above to retrieve and parse the data from the API.
 ```{r, echo = TRUE, message = FALSE}
 DayOneDataSa <- GET(
   url = "https://api.covid19api.com/dayone/country/south-africa/status/confirmed")
@@ -107,6 +108,7 @@ Day1 <- SaMex(df1 = DayOneDfSa, df2 = DayOneDfMex)
 Day1$Province <- NULL
 Day1$City <- NULL
 Day1$CityCode <- NULL
+Day1
 ```
 
 These functions will allow the user to query the Day One Mexico and Day One South Africa APIs based on the columns by entering all or a column name.  To subset by rows the user can enter arguments for the filter function.
@@ -140,7 +142,7 @@ resp2Df <- as.data.frame(resp2Json$Countries)
 resp2Df$ID <- NULL
 ```
 
-This function allows the user to return NewDeaths, TotalDeaths,& NewRecovered, or all of the data based on inputs from the Summary API.  To subset by rows the user can enter arguments in the filter function.
+This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all of the data based on inputs from the Summary API.  To subset by rows the user can enter arguments in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 Summary <- function(type = "all"){
   OutputAPI <- GET("https://api.covid19api.com/summary")
@@ -151,47 +153,49 @@ Summary <- function(type = "all"){
 Summary("Country")
 ```
 
-The next set of functions will return live cases by case type for a country after a given date. This particular endpoint returns cases for Greece.
+The next set of functions will return live cases by case type for a country after a given date. This particular endpoint returns cases for South Africa.
 ```{r, echo = TRUE, results = 'hide'}
-Live <- GET("https://api.covid19api.com/live/country/Greece/status/confirmed/date/2020-03-21T13:13:30Z")
+Live <- GET("https://api.covid19api.com/live/country/south-africa/status/confirmed/date/2020-03-21T13:13:30Z")
 LiveText <- content(Live, "text")
 LiveTextJson <- fromJSON(LiveText, flatten = TRUE)
 
 # Save the data frame as LiveDf.
 LiveDf <- as.data.frame(LiveTextJson)
 
-#Remove the ID, Province, city, & CityCode columns.
+#Remove the ID, Province, City, & CityCode columns.
 LiveDf$ID <- NULL
 LiveDf$Province <- NULL
 LiveDf$City <- NULL
 LiveDf$CityCode <- NULL
+LiveDf
 ```
-The following function will allow the user to query live cases for Greece by columns  To subset by rows the user can enter arguments in the filter function.
+The following function will allow the user to query live cases for Greece by columns.  To subset by rows the user can enter arguments in the filter function.
 ```{r, echo = TRUE, results = 'hide', eval = FALSE}
 Live2 <- function(type = "all"){
-  OutputLive2 <- GET("https://api.covid19api.com/live/country/Greece/status/confirmed/date/2020-03-21T13:13:30Z")
+  OutputLive2 <- GET("https://api.covid19api.com/live/country/south-africa/status/confirmed/date/2020-03-21T13:13:30Z")
     DataLive <- fromJSON(rawToChar(OutputLive2$content))
-  if(type!="all"){DataLive <- DataLive %>% select(type, Country, CountryCode, Lat, Lon, Confirmed, Deaths, Recovered, Active, Date) %>% filter(Deaths == "12604")}
+  if(type!="all"){DataLive <- DataLive %>% select(type, Country, CountryCode, Lat, Lon, Confirmed, Deaths, Recovered, Active, Date) %>% filter(Deaths == "59406")}
   return(DataLive)}
 Live2("Country")
 ```
 
 The next set of functions will access the Day One endpoint which has information on all cases by case type for a country from the first recorded case.  This function accesses cases for Denmark.  
 ```{r, echo = TRUE, results = 'hide', message = FALSE}
-One <- GET("https://api.covid19api.com/dayone/country/denmark/status/confirmed")
+One <- GET("https://api.covid19api.com/total/dayone/country/denmark/status/confirmed")
 OneText <- content(One, "text")
 OneTextJson <- fromJSON(OneText, flatten = TRUE)
 
 # Save the data frame as OneDf.
 OneDf <- as.data.frame(OneTextJson)
+OneDf
 ```
 
 The following function will allow the user to query day one cases for Denmark by columns.  To subset the rows the user can enter arguments in the filter function.
 ```{r, echo = TRUE, eval = FALSE}
 OneFun <- function(type = "all"){
-  OutputOneFun <- GET("https://api.covid19api.com/dayone/country/denmark/status/confirmed")
+  OutputOneFun <- GET("https://api.covid19api.com/total/dayone/country/denmark/status/confirmed")
     DataOneFun <- fromJSON(rawToChar(OutputOneFun$content))
-  if(type!="all"){DataOneFun <- DataOneFun %>% select(type, Country, CountryCode, Lat, Lon, Date, Status, Cases, Province, City, CityCode) %>% filter(Province == "Faroe Islands")}
+  if(type!="all"){DataOneFun <- DataOneFun %>% select(type, Country, CountryCode, Lat, Lon, Date, Status, Cases, Province, City, CityCode) %>% filter(Cases == 1116)}
   return(DataOneFun)}
 OneFun("Country")
 ```
@@ -254,14 +258,14 @@ ggplot(Day1, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge"
 
 ```
 
-The following code calculates numerical summaries for daily cases confirmed since Day 1 for the Mexico and South Africa. These numbers are updated frequently.
+The following code calculates numerical summaries for daily cases confirmed since Day 1 for Mexico and South Africa. Average confirmed cases for Mexico were approximately 1.4M and confirmed cases for South Africa were 1.1M.
 ```{r, echo = TRUE}
 Day1 %>%
   group_by(Country) %>%
   summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR =    IQR(Cases))
 ```
 
-The following code creates a new variable (NewRatio = TotalDeaths/Total Confirmed) that represents the ratio of total deaths to total confirmed cases and appends to the Resp2Df which is based on total cases for Countries that is updated daily.
+The following code creates a new variable (Ratio = TotalDeaths/TotalConfirmed) that represents the ratio of total deaths to total confirmed cases and appends to the Resp2Df which is based on total cases for Countries that is updated daily.  The ratio of deaths to total confirmed cases is low meaning most people recover from Covid19.
 ```{r, echo = TRUE}
 resp2Df <- resp2Df %>% mutate(Ratio = TotalDeaths/TotalConfirmed)
 head(resp2Df) %>% select(Country, TotalDeaths, TotalConfirmed, Ratio)
@@ -281,26 +285,26 @@ g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths",
 g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 20000, y = 200, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
-The following code creates a new variable which calculates the confirmed cases to recovered ratio for Greece.  The confirmed to recovered ratios were approximately 5%. 
-```{r, echo = TRUE, eval = FALSE}
+The following code creates a new variable which calculates the confirmed cases to recovered ratio for South Africa.  The confirmed to recovered ratios were approximately 5%. 
+```{r, echo = TRUE, eval = FALSE, error = FALSE}
 LiveDf <- LiveDf %>% mutate(Ratio = Confirmed/Recovered)
-head(LiveDf) %>% select(Country, Confirmed, Recovered, Ratio)
+head(LiveDf) %>% select(Country, Deaths, Recovered, Ratio, Confirmed)
 ```
 
-The following code returns numerical summaries for active cases in Greece.
-```{r, echo = TRUE, eval = FALSE}
-LiveDf %>%
-  summarize(Avg = mean(Active), Sd = sd(Active), Median = median(Active), IQR = IQR(Active))
+The following code returns numerical summaries for active cases in Norway and Switzerland.  Switzerland on average had higher cases than Norway.
+```{r, echo = TRUE}
+Combo %>% group_by(Country) %>%
+  summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR = IQR(Cases))
 ```
 
-The following code will produce a histogram that displays deaths in Greece. Daily reports have remained around a cumulative total of 12K to 13K.
-```{r, echo = TRUE, eval = FALSE}
-ggplot(data = LiveDf, aes (Deaths)) + geom_histogram(breaks = seq(12500, 14900, by = 300), col = "blue", fill = "purple", alpha = .2) + labs(title = "Histogram for Deaths")
+The following code will produce a histogram that displays cases in South Africa & Mexico.  The highest frequency of cases is between 0 and 500 cases.
+```{r, echo = TRUE}
+ggplot(data = Day1, aes (Cases)) + geom_histogram(breaks = seq(10, 5000, by = 500), col = "blue", fill = "purple", alpha = .2) + labs(title = "Histogram for Cases in South Africa and Mexico")
 ```
 
-The following code returns a contingency table that reports the number of confirmed case statuses by province for the country of Denmark.  There were 578 confirmed cases in Faro Islands and 566 in Greenland.
-```{r, echo = TRUE, eval = FALSE}
-tbl3 <- table(OneDf$Status, OneDf$Province)
+The following code returns a contingency table that reports the number of confirmed case statuses for the country of Denmark.  There were 585 confirmed cases for the country.
+```{r, echo = TRUE}
+tbl3 <- table(OneDf$Status, OneDf$Country)
 tbl3
 ```
 

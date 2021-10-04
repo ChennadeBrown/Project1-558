@@ -81,7 +81,23 @@ Combo <- NorSwiz(df1 = getCountryJsTb, df2 = getCountryJs2Tb)
 Combo$Province <- NULL
 Combo$City <- NULL
 Combo$CityCode <- NULL
+Combo
 ```
+
+    ## # A tibble: 64 x 7
+    ##    Country     CountryCode Lat   Lon   Cases Status    Date                
+    ##    <chr>       <chr>       <chr> <chr> <int> <chr>     <chr>               
+    ##  1 Switzerland CH          46.82 8.23     27 confirmed 2020-03-01T00:00:00Z
+    ##  2 Switzerland CH          46.82 8.23     42 confirmed 2020-03-02T00:00:00Z
+    ##  3 Switzerland CH          46.82 8.23     56 confirmed 2020-03-03T00:00:00Z
+    ##  4 Switzerland CH          46.82 8.23     90 confirmed 2020-03-04T00:00:00Z
+    ##  5 Switzerland CH          46.82 8.23    114 confirmed 2020-03-05T00:00:00Z
+    ##  6 Switzerland CH          46.82 8.23    214 confirmed 2020-03-06T00:00:00Z
+    ##  7 Switzerland CH          46.82 8.23    268 confirmed 2020-03-07T00:00:00Z
+    ##  8 Switzerland CH          46.82 8.23    337 confirmed 2020-03-08T00:00:00Z
+    ##  9 Switzerland CH          46.82 8.23    374 confirmed 2020-03-09T00:00:00Z
+    ## 10 Switzerland CH          46.82 8.23    491 confirmed 2020-03-10T00:00:00Z
+    ## # ... with 54 more rows
 
 The following functions will allow the user to query the Norway and
 Switzerland API by entering the column names or all. To subset by rows
@@ -105,8 +121,8 @@ ConfirmedNor <- function(type = "all"){
 ConfirmedNor("CountryCode")
 ```
 
-The following functions returns data for Africa & Mexico from the first
-recorded case. We will go through the same steps outlined above to
+The following functions returns data for South Africa & Mexico from the
+first recorded case. We will go through the same steps outlined above to
 retrieve and parse the data from the API.
 
 ``` r
@@ -134,7 +150,23 @@ Day1 <- SaMex(df1 = DayOneDfSa, df2 = DayOneDfMex)
 Day1$Province <- NULL
 Day1$City <- NULL
 Day1$CityCode <- NULL
+Day1
 ```
+
+    ## # A tibble: 1,163 x 7
+    ##    Country      CountryCode Lat    Lon   Cases Status    Date                
+    ##    <chr>        <chr>       <chr>  <chr> <int> <chr>     <chr>               
+    ##  1 South Africa ZA          -30.56 22.94     1 confirmed 2020-03-05T00:00:00Z
+    ##  2 South Africa ZA          -30.56 22.94     1 confirmed 2020-03-06T00:00:00Z
+    ##  3 South Africa ZA          -30.56 22.94     1 confirmed 2020-03-07T00:00:00Z
+    ##  4 South Africa ZA          -30.56 22.94     3 confirmed 2020-03-08T00:00:00Z
+    ##  5 South Africa ZA          -30.56 22.94     3 confirmed 2020-03-09T00:00:00Z
+    ##  6 South Africa ZA          -30.56 22.94     7 confirmed 2020-03-10T00:00:00Z
+    ##  7 South Africa ZA          -30.56 22.94    13 confirmed 2020-03-11T00:00:00Z
+    ##  8 South Africa ZA          -30.56 22.94    17 confirmed 2020-03-12T00:00:00Z
+    ##  9 South Africa ZA          -30.56 22.94    24 confirmed 2020-03-13T00:00:00Z
+    ## 10 South Africa ZA          -30.56 22.94    38 confirmed 2020-03-14T00:00:00Z
+    ## # ... with 1,153 more rows
 
 These functions will allow the user to query the Day One Mexico and Day
 One South Africa APIs based on the columns by entering all or a column
@@ -175,7 +207,7 @@ resp2Df <- as.data.frame(resp2Json$Countries)
 resp2Df$ID <- NULL
 ```
 
-This function allows the user to return NewDeaths, TotalDeaths,&
+This function allows the user to return NewDeaths, TotalDeaths, &
 NewRecovered, or all of the data based on inputs from the Summary API.
 To subset by rows the user can enter arguments in the filter function.
 
@@ -191,32 +223,33 @@ Summary("Country")
 
 The next set of functions will return live cases by case type for a
 country after a given date. This particular endpoint returns cases for
-Greece.
+South Africa.
 
 ``` r
-Live <- GET("https://api.covid19api.com/live/country/Greece/status/confirmed/date/2020-03-21T13:13:30Z")
+Live <- GET("https://api.covid19api.com/live/country/south-africa/status/confirmed/date/2020-03-21T13:13:30Z")
 LiveText <- content(Live, "text")
 LiveTextJson <- fromJSON(LiveText, flatten = TRUE)
 
 # Save the data frame as LiveDf.
 LiveDf <- as.data.frame(LiveTextJson)
 
-#Remove the ID, Province, city, & CityCode columns.
+#Remove the ID, Province, City, & CityCode columns.
 LiveDf$ID <- NULL
 LiveDf$Province <- NULL
 LiveDf$City <- NULL
 LiveDf$CityCode <- NULL
+LiveDf
 ```
 
 The following function will allow the user to query live cases for
-Greece by columns To subset by rows the user can enter arguments in the
+Greece by columns. To subset by rows the user can enter arguments in the
 filter function.
 
 ``` r
 Live2 <- function(type = "all"){
-  OutputLive2 <- GET("https://api.covid19api.com/live/country/Greece/status/confirmed/date/2020-03-21T13:13:30Z")
+  OutputLive2 <- GET("https://api.covid19api.com/live/country/south-africa/status/confirmed/date/2020-03-21T13:13:30Z")
     DataLive <- fromJSON(rawToChar(OutputLive2$content))
-  if(type!="all"){DataLive <- DataLive %>% select(type, Country, CountryCode, Lat, Lon, Confirmed, Deaths, Recovered, Active, Date) %>% filter(Deaths == "12604")}
+  if(type!="all"){DataLive <- DataLive %>% select(type, Country, CountryCode, Lat, Lon, Confirmed, Deaths, Recovered, Active, Date) %>% filter(Deaths == "59406")}
   return(DataLive)}
 Live2("Country")
 ```
@@ -226,12 +259,13 @@ information on all cases by case type for a country from the first
 recorded case. This function accesses cases for Denmark.
 
 ``` r
-One <- GET("https://api.covid19api.com/dayone/country/denmark/status/confirmed")
+One <- GET("https://api.covid19api.com/total/dayone/country/denmark/status/confirmed")
 OneText <- content(One, "text")
 OneTextJson <- fromJSON(OneText, flatten = TRUE)
 
 # Save the data frame as OneDf.
 OneDf <- as.data.frame(OneTextJson)
+OneDf
 ```
 
 The following function will allow the user to query day one cases for
@@ -240,9 +274,9 @@ the filter function.
 
 ``` r
 OneFun <- function(type = "all"){
-  OutputOneFun <- GET("https://api.covid19api.com/dayone/country/denmark/status/confirmed")
+  OutputOneFun <- GET("https://api.covid19api.com/total/dayone/country/denmark/status/confirmed")
     DataOneFun <- fromJSON(rawToChar(OutputOneFun$content))
-  if(type!="all"){DataOneFun <- DataOneFun %>% select(type, Country, CountryCode, Lat, Lon, Date, Status, Cases, Province, City, CityCode) %>% filter(Province == "Faroe Islands")}
+  if(type!="all"){DataOneFun <- DataOneFun %>% select(type, Country, CountryCode, Lat, Lon, Date, Status, Cases, Province, City, CityCode) %>% filter(Cases == 1116)}
   return(DataOneFun)}
 OneFun("Country")
 ```
@@ -298,7 +332,7 @@ ggplot(Combo, aes(x = Cases, y = Country)) +
 geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirmed Cases")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-60-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases
 confirmed for the two countries. The mean case count per day for Norway
@@ -324,7 +358,7 @@ for Norway & Switzerland which were similar through March - April 2020.
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
 
 The following contingency table reports the number of confirmed case
 statuses for South Africa and Mexico from the first recorded case which
@@ -345,11 +379,12 @@ The following bar graph plots the output of the above contingency table.
 ggplot(Day1, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Cases Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases
-confirmed since Day 1 for the Mexico and South Africa. These numbers are
-updated frequently.
+confirmed since Day 1 for Mexico and South Africa. Average confirmed
+cases for Mexico were approximately 1.4M and confirmed cases for South
+Africa were 1.1M.
 
 ``` r
 Day1 %>%
@@ -363,10 +398,11 @@ Day1 %>%
     ## 1 Mexico       1429834. 1117048. 1272350. 1998368.
     ## 2 South Africa 1124908.  872416.  912477  1147496.
 
-The following code creates a new variable (NewRatio = TotalDeaths/Total
-Confirmed) that represents the ratio of total deaths to total confirmed
-cases and appends to the Resp2Df which is based on total cases for
-Countries that is updated daily.
+The following code creates a new variable (Ratio =
+TotalDeaths/TotalConfirmed) that represents the ratio of total deaths to
+total confirmed cases and appends to the Resp2Df which is based on total
+cases for Countries that is updated daily. The ratio of deaths to total
+confirmed cases is low meaning most people recover from Covid19.
 
 ``` r
 resp2Df <- resp2Df %>% mutate(Ratio = TotalDeaths/TotalConfirmed)
@@ -408,41 +444,52 @@ g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths",
 g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 20000, y = 200, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
 
 The following code creates a new variable which calculates the confirmed
-cases to recovered ratio for Greece. The confirmed to recovered ratios
-were approximately 5%.
+cases to recovered ratio for South Africa. The confirmed to recovered
+ratios were approximately 5%.
 
 ``` r
 LiveDf <- LiveDf %>% mutate(Ratio = Confirmed/Recovered)
-head(LiveDf) %>% select(Country, Confirmed, Recovered, Ratio)
+head(LiveDf) %>% select(Country, Deaths, Recovered, Ratio, Confirmed)
 ```
 
 The following code returns numerical summaries for active cases in
-Greece.
+Norway and Switzerland. Switzerland on average had higher cases than
+Norway.
 
 ``` r
-LiveDf %>%
-  summarize(Avg = mean(Active), Sd = sd(Active), Median = median(Active), IQR = IQR(Active))
+Combo %>% group_by(Country) %>%
+  summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR = IQR(Cases))
 ```
 
-The following code will produce a histogram that displays deaths in
-Greece. Daily reports have remained around a cumulative total of 12K to
-13K.
+    ## # A tibble: 2 x 5
+    ##   Country       Avg    Sd Median   IQR
+    ##   <chr>       <dbl> <dbl>  <dbl> <dbl>
+    ## 1 Norway      1760. 1590.   1398 2720.
+    ## 2 Switzerland 5402. 5967.   2450 9767.
+
+The following code will produce a histogram that displays cases in South
+Africa & Mexico. The highest frequency of cases is between 0 and 500
+cases.
 
 ``` r
-ggplot(data = LiveDf, aes (Deaths)) + geom_histogram(breaks = seq(12500, 14900, by = 300), col = "blue", fill = "purple", alpha = .2) + labs(title = "Histogram for Deaths")
+ggplot(data = Day1, aes (Cases)) + geom_histogram(breaks = seq(10, 5000, by = 500), col = "blue", fill = "purple", alpha = .2) + labs(title = "Histogram for Cases in South Africa and Mexico")
 ```
+
+![](README_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
 
 The following code returns a contingency table that reports the number
-of confirmed case statuses by province for the country of Denmark. There
-were 578 confirmed cases in Faro Islands and 566 in Greenland.
+of confirmed case statuses for the country of Denmark. There were 585
+confirmed cases for the country.
 
 ``` r
-tbl3 <- table(OneDf$Status, OneDf$Province)
+tbl3 <- table(OneDf$Status, OneDf$Country)
 tbl3
 ```
+
+    ## < table of extent 0 x 0 >
 
 # Conclusion
 
