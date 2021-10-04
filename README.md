@@ -105,8 +105,8 @@ ConfirmedNor <- function(type = "all"){
 ConfirmedNor("CountryCode")
 ```
 
-The following functions return Day One data for Africa & Mexico for the
-first recorded case. We will go through the same steps outlined above to
+The following functions returns data for Africa & Mexico from the first
+recorded case. We will go through the same steps outlined above to
 retrieve and parse the data from the API.
 
 ``` r
@@ -232,7 +232,6 @@ OneTextJson <- fromJSON(OneText, flatten = TRUE)
 
 # Save the data frame as OneDf.
 OneDf <- as.data.frame(OneTextJson)
-OneDf
 ```
 
 The following function will allow the user to query day one cases for
@@ -259,13 +258,7 @@ CtryTextJson <- fromJSON(CtryText, flatten = TRUE)
 
 # Save the data frame as CtryDf.
 CtryDf <- as.data.frame(CtryTextJson)
-CtryDf
 ```
-
-    ## # A tibble: 1 x 2
-    ##   message                                                                 success
-    ##   <chr>                                                                   <lgl>  
-    ## 1 Too Many Requests on /countries. Please upgrade to a subscription at h~ FALSE
 
 The following function will allow the user to query the Countries API by
 column. To subset by rows the user can enter arguments in the filter
@@ -305,7 +298,7 @@ ggplot(Combo, aes(x = Cases, y = Country)) +
 geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirmed Cases")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-60-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases
 confirmed for the two countries. The mean case count per day for Norway
@@ -331,11 +324,11 @@ for Norway & Switzerland which were similar through March - April 2020.
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
 
 The following contingency table reports the number of confirmed case
-statuses for South Africa and Mexico for a certain time frame since day
-1.
+statuses for South Africa and Mexico from the first recorded case which
+were similar.
 
 ``` r
 tbl2 <- table(Day1$Status, Day1$Country)
@@ -346,19 +339,17 @@ tbl2
     ##             Mexico South Africa
     ##   confirmed    584          579
 
-The following bar graph reports the number of confirmed case statuses
-for South Africa and Mexico for a certain time frame since day one which
-were similar.
+The following bar graph plots the output of the above contingency table.
 
 ``` r
 ggplot(Day1, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Cases Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases
-confirmed since Day 1 for the two countries. These numbers are updated
-frequently.
+confirmed since Day 1 for the Mexico and South Africa. These numbers are
+updated frequently.
 
 ``` r
 Day1 %>%
@@ -379,20 +370,18 @@ Countries that is updated daily.
 
 ``` r
 resp2Df <- resp2Df %>% mutate(Ratio = TotalDeaths/TotalConfirmed)
-head(resp2Df)
+head(resp2Df) %>% select(Country, TotalDeaths, TotalConfirmed, Ratio)
 ```
 
-    ## # A tibble: 6 x 11
-    ##   Country   CountryCode Slug    NewConfirmed TotalConfirmed NewDeaths TotalDeaths
-    ##   <chr>     <chr>       <chr>          <int>          <int>     <int>       <int>
-    ## 1 Afghanis~ AF          afghan~            0         155191         0        7206
-    ## 2 Albania   AL          albania            0         171794         0        2713
-    ## 3 Algeria   DZ          algeria            0         203789         0        5822
-    ## 4 Andorra   AD          andorra            0          15222         0         130
-    ## 5 Angola    AO          angola             0          58943         0        1577
-    ## 6 Antigua ~ AG          antigu~            0           3503         0          85
-    ## # ... with 4 more variables: NewRecovered <int>, TotalRecovered <int>,
-    ## #   Date <chr>, Ratio <dbl>
+    ## # A tibble: 6 x 4
+    ##   Country             TotalDeaths TotalConfirmed   Ratio
+    ##   <chr>                     <int>          <int>   <dbl>
+    ## 1 Afghanistan                7206         155191 0.0464 
+    ## 2 Albania                    2713         171794 0.0158 
+    ## 3 Algeria                    5822         203789 0.0286 
+    ## 4 Andorra                     130          15222 0.00854
+    ## 5 Angola                     1577          58943 0.0268 
+    ## 6 Antigua and Barbuda          85           3503 0.0243
 
 The following code returns numerical summaries for total deaths among
 all countries reported in the Summary API. The average total deaths was
@@ -419,7 +408,7 @@ g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths",
 g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 20000, y = 200, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
 
 The following code creates a new variable which calculates the confirmed
 cases to recovered ratio for Greece. The confirmed to recovered ratios
@@ -427,11 +416,11 @@ were approximately 5%.
 
 ``` r
 LiveDf <- LiveDf %>% mutate(Ratio = Confirmed/Recovered)
-head(LiveDf)
+head(LiveDf) %>% select(Country, Confirmed, Recovered, Ratio)
 ```
 
 The following code returns numerical summaries for active cases in
-Greece. Average active cases total 478,105.
+Greece.
 
 ``` r
 LiveDf %>%

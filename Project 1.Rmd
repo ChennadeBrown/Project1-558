@@ -82,7 +82,7 @@ ConfirmedNor <- function(type = "all"){
 ConfirmedNor("CountryCode")
 ```
 
-The following functions return Day One data for Africa & Mexico for the first recorded case. We will go through the same steps outlined above to retrieve and parse the data from the API.
+The following functions returns  data for Africa & Mexico from the first recorded case. We will go through the same steps outlined above to retrieve and parse the data from the API.
 ```{r, echo = TRUE, message = FALSE}
 DayOneDataSa <- GET(
   url = "https://api.covid19api.com/dayone/country/south-africa/status/confirmed")
@@ -184,7 +184,6 @@ OneTextJson <- fromJSON(OneText, flatten = TRUE)
 
 # Save the data frame as OneDf.
 OneDf <- as.data.frame(OneTextJson)
-OneDf
 ```
 
 The following function will allow the user to query day one cases for Denmark by columns.  To subset the rows the user can enter arguments in the filter function.
@@ -205,7 +204,6 @@ CtryTextJson <- fromJSON(CtryText, flatten = TRUE)
 
 # Save the data frame as CtryDf.
 CtryDf <- as.data.frame(CtryTextJson)
-CtryDf
 ```
 The following function will allow the user to query the Countries API by column.  To subset by rows the user can enter arguments in the filter function.
 ```{r, echo = TRUE, results = 'hide', eval = FALSE}
@@ -238,24 +236,25 @@ Combo %>%
   group_by(Country) %>%
   summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR =    IQR(Cases))
 ```
+
 The following bar plot reports the number of days with confirmed cases for Norway & Switzerland which were similar through March - April 2020.
 ```{r, echo = TRUE}
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
 
-The following contingency table reports the number of confirmed case statuses  for South Africa and Mexico for a certain time frame since day 1. 
+The following contingency table reports the number of confirmed case statuses  for South Africa and Mexico from the first recorded case which were similar. 
 ```{r, echo = TRUE}
 tbl2 <- table(Day1$Status, Day1$Country)
 tbl2
 ```
 
-The following bar graph reports the number of confirmed case statuses for South Africa and Mexico for a certain time frame since day one which were similar.  
+The following bar graph plots the output of the above contingency table.  
 ```{r, echo = TRUE}
 ggplot(Day1, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Cases Statuses")
 
 ```
 
-The following code calculates numerical summaries for daily cases confirmed since Day 1 for the two countries. These numbers are updated frequently.
+The following code calculates numerical summaries for daily cases confirmed since Day 1 for the Mexico and South Africa. These numbers are updated frequently.
 ```{r, echo = TRUE}
 Day1 %>%
   group_by(Country) %>%
@@ -265,7 +264,7 @@ Day1 %>%
 The following code creates a new variable (NewRatio = TotalDeaths/Total Confirmed) that represents the ratio of total deaths to total confirmed cases and appends to the Resp2Df which is based on total cases for Countries that is updated daily.
 ```{r, echo = TRUE}
 resp2Df <- resp2Df %>% mutate(Ratio = TotalDeaths/TotalConfirmed)
-head(resp2Df)
+head(resp2Df) %>% select(Country, TotalDeaths, TotalConfirmed, Ratio)
 ```
 
 The following code returns numerical summaries for total deaths among all countries reported in the Summary API.  The average total deaths was 24,941.
@@ -285,10 +284,10 @@ g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geo
 The following code creates a new variable which calculates the confirmed cases to recovered ratio for Greece.  The confirmed to recovered ratios were approximately 5%. 
 ```{r, echo = TRUE, eval = FALSE}
 LiveDf <- LiveDf %>% mutate(Ratio = Confirmed/Recovered)
-head(LiveDf)
+head(LiveDf) %>% select(Country, Confirmed, Recovered, Ratio)
 ```
 
-The following code returns numerical summaries for active cases in Greece.  Average active cases total 478,105.
+The following code returns numerical summaries for active cases in Greece.
 ```{r, echo = TRUE, eval = FALSE}
 LiveDf %>%
   summarize(Avg = mean(Active), Sd = sd(Active), Median = median(Active), IQR = IQR(Active))
