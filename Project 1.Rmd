@@ -49,6 +49,7 @@ getCountryJs2 <- fromJSON(getCountryText2, flatten = TRUE)
 We will convert the parsed JSON data for Norway & Switzerland into a tibble for our analysis.
 ```{r, echo = TRUE}
 getCountryJsTb <- as_tibble(getCountryJs)
+getCountryJsTb
 ```
 
 ```{r, echo = TRUE}
@@ -138,6 +139,7 @@ resp2Json <- fromJSON(resp2Text, flatten = TRUE)
 resp2Df <- as.data.frame(resp2Json$Countries)
 
 resp2Df$ID <- NULL
+resp2Df
 ```
 
 This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all of the data based on inputs from the Summary API.  To subset by rows the user can enter arguments in the filter function.
@@ -281,10 +283,12 @@ g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths",
 g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 20000, y = 200, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
-The following code creates a new variable which calculates the confirmed cases to recovered ratio for Greece.  The confirmed to recovered ratios were above 4:1. 
-```{r, echo = TRUE, eval = FALSE, error = FALSE}
-LiveDf <- LiveDf %>% mutate(Ratio = Confirmed/Recovered)
-head(LiveDf) %>% select(Country, Deaths, Recovered, Ratio, Confirmed)
+The following code creates a new variable which calculates new deaths to new confirmed cases for the countries in the summary data set. The ratio of new deaths to confirmed cases was less than 1% for Australia.. 
+```{r, echo = TRUE}
+resp2Df <- resp2Df %>% mutate(Ratio = NewDeaths/NewConfirmed)
+a <- filter(resp2Df, Country == "Australia")
+
+head(a) %>% select(Country, NewConfirmed, NewDeaths,Ratio)
 ```
 
 The following code returns numerical summaries for active cases in Norway and Switzerland.  Switzerland on average had higher cases than Norway.
@@ -296,12 +300,6 @@ Combo %>% group_by(Country) %>%
 The following code will produce a histogram that displays the total confirmed cases for all countries included in the summary API. The highest frequency of cases was between 50,000 and 250,000 leveling off in the 750,000 range.
 ```{r, echo = TRUE}
 ggplot(data = resp2Df, aes(TotalConfirmed)) + geom_histogram(breaks = seq(20000, 900000, by = 50000), col = "blue", fill = "purple", alpha = .2) + labs(title = "Total Confirmed Cases for All Countries") + xlab("Total Confirmed")
-```
-
-The following code returns a contingency table that reports the number of confirmed case statuses for the country of Denmark.  There were 585 confirmed cases for the country.
-```{r, echo = TRUE}
-tbl3 <- table(OneDf$Status, OneDf$Country)
-tbl3
 ```
 
 # Conclusion
