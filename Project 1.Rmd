@@ -288,12 +288,6 @@ a <- filter(resp2Df, Country == "Australia")
 head(a) %>% select(Country, NewConfirmed, NewDeaths,Ratio)
 ```
 
-The following code returns numerical summaries for active cases in Norway and Switzerland.  Switzerland on average had higher cases than Norway.
-```{r, echo = TRUE}
-Combo %>% group_by(Country) %>%
-  summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR = IQR(Cases))
-```
-
 The following code will produce a histogram that displays the total confirmed cases for all countries included in the summary API. The highest frequency of cases was between 50,000 and 250,000 leveling off in the 750,000 range.
 ```{r, echo = TRUE}
 ggplot(data = resp2Df, aes(TotalConfirmed)) + geom_histogram(breaks = seq(20000, 900000, by = 50000), col = "blue", fill = "purple", alpha = .2) + labs(title = "Total Confirmed Cases for All Countries") + xlab("Total Confirmed")
