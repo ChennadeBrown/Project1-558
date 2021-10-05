@@ -140,7 +140,7 @@ resp2Df <- as.data.frame(resp2Json$Countries)
 resp2Df$ID <- NULL
 ```
 
-This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all of the data based on inputs from the Summary API.  To subset by rows the user can enter arguments in the filter function.
+This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all columns from the Summary API.  To subset by rows the user can enter arguments in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 Summary <- function(type = "all"){
   OutputAPI <- GET("https://api.covid19api.com/summary")
@@ -187,7 +187,7 @@ OneDf <- as.data.frame(OneTextJson)
 ```
 
 The following function will allow the user to query day one cases for Denmark by columns.  To subset the rows the user can enter arguments in the filter function.
-```{r, echo = TRUE, eval = FALSE, error = FALSE}
+```{r, echo = TRUE, eval = FALSE}
 OneFun <- function(type = "all"){
   OutputOneFun <- GET("https://api.covid19api.com/total/dayone/country/denmark/status/confirmed")
     DataOneFun <- fromJSON(rawToChar(OutputOneFun$content))
@@ -219,7 +219,7 @@ CtryFun("Country")
 # Data Analysis
 We will create a contingency table that shows the occurrences of confirmed cases  between March - April 2020 for Switzerland and Norway.  Each country had a confirmed case during this time frame.
 ```{r, echo = TRUE}
-tbl <- table(Combo$Country, Combo$Status)
+tbl <- table(Combo$Status, Combo$Country)
 tbl
 ```
 
@@ -237,18 +237,18 @@ Combo %>%
   summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR =    IQR(Cases))
 ```
 
-The following bar plot reports the number of days with confirmed cases for Norway & Switzerland which were similar through March - April 2020.
+The following bar plot reports the number of confirmed cases for Norway & Switzerland which were similar through March - April 2020.  The data appears to report each day that had a confirmed case status.
 ```{r, echo = TRUE}
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
 
-The following contingency table reports the number of confirmed case statuses for South Africa and Mexico from the first recorded case which were similar as well.  Based on the count these numbers appear to be based on a certain time frame.  
+The following contingency table reports the number of confirmed case statuses for South Africa and Mexico returned from the Day 1 API.  
 ```{r, echo = TRUE}
 tbl2 <- table(Day1$Status, Day1$Country)
 tbl2
 ```
 
-The following bar graph plots the output of the above contingency table which shows the confirmed case statuses for Mexico and South Africa from the first recorded case.   
+The following bar graph plots the output of the above contingency table which shows the confirmed case statuses for Mexico and South Africa from the first recorded case. Case statuses were similar for each country.  
 ```{r, echo = TRUE}
 ggplot(Day1, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Cases Statuses")
 
@@ -267,7 +267,7 @@ resp2Df <- resp2Df %>% mutate(Ratio = TotalDeaths/TotalConfirmed)
 head(resp2Df) %>% select(Country, TotalDeaths, TotalConfirmed, Ratio)
 ```
 
-The following code returns numerical summaries for total deaths among all countries reported in the Summary API.  The average total deaths was approximately 24K.
+The following code returns numerical summaries for total deaths among all countries reported in the Summary API.  The average total deaths was approximately 25K.
 ```{r, echo = TRUE}
 resp2Df %>%
     summarize(Avg = mean(TotalDeaths), Max = max(TotalDeaths), Sd = sd(TotalDeaths), Min = min(TotalDeaths))
@@ -276,8 +276,8 @@ resp2Df %>%
 The following code returns a scatter plot for the summary data set.  The plot shows there is minimal data on Newly Confirmed Cases and New Deaths; however, the graph shows a positive correlation between newly confirmed cases and new deaths.
 ```{r, echo = TRUE}
 correlation <- cor(resp2Df$NewConfirmed, resp2Df$NewDeaths)
-g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths", x = "New Confirmed")
-g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 20000, y = 200, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
+g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths", x = "New Confirmed Cases")
+g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 125000, y = 50, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
 The following code creates a new variable which calculates new deaths to new confirmed cases for the countries in the summary data set. The ratio of new deaths to confirmed cases was less than 1% for Australia.. 
@@ -285,7 +285,7 @@ The following code creates a new variable which calculates new deaths to new con
 resp2Df <- resp2Df %>% mutate(Ratio = NewDeaths/NewConfirmed)
 a <- filter(resp2Df, Country == "Australia")
 
-head(a) %>% select(Country, NewConfirmed, NewDeaths,Ratio)
+head(a) %>% select(Country, NewConfirmed, NewDeaths, Ratio)
 ```
 
 The following code will produce a histogram that displays the total confirmed cases for all countries included in the summary API. The highest frequency of cases was between 50,000 and 250,000 leveling off in the 750,000 range.
