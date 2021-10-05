@@ -49,7 +49,6 @@ getCountryJs2 <- fromJSON(getCountryText2, flatten = TRUE)
 We will convert the parsed JSON data for Norway & Switzerland into a tibble for our analysis.
 ```{r, echo = TRUE}
 getCountryJsTb <- as_tibble(getCountryJs)
-getCountryJsTb
 ```
 
 ```{r, echo = TRUE}
@@ -139,7 +138,6 @@ resp2Json <- fromJSON(resp2Text, flatten = TRUE)
 resp2Df <- as.data.frame(resp2Json$Countries)
 
 resp2Df$ID <- NULL
-resp2Df
 ```
 
 This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all of the data based on inputs from the Summary API.  To subset by rows the user can enter arguments in the filter function.
@@ -232,7 +230,7 @@ geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirm
 
 ```
 
-The following code calculates numerical summaries for daily cases confirmed for the two countries.  The mean case count per day for Norway was 1,759 cases and the mean case count per day for Switzerland was 5,402 cases. 
+The following code calculates numerical summaries for daily cases confirmed for the two countries.  The mean case count per day for Norway was 1,760 cases and the mean case count per day for Switzerland was 5,402 cases. 
 ```{r, echo = TRUE}
 Combo %>%
   group_by(Country) %>%
@@ -269,11 +267,10 @@ resp2Df <- resp2Df %>% mutate(Ratio = TotalDeaths/TotalConfirmed)
 head(resp2Df) %>% select(Country, TotalDeaths, TotalConfirmed, Ratio)
 ```
 
-The following code returns numerical summaries for total deaths among all countries reported in the Summary API.  The average total deaths was 24,941.
+The following code returns numerical summaries for total deaths among all countries reported in the Summary API.  The average total deaths was approximately 24K.
 ```{r, echo = TRUE}
 resp2Df %>%
     summarize(Avg = mean(TotalDeaths), Max = max(TotalDeaths), Sd = sd(TotalDeaths), Min = min(TotalDeaths))
-
 ```
 
 The following code returns a scatter plot for the summary data set.  The plot shows there is minimal data on Newly Confirmed Cases and New Deaths; however, the graph shows a positive correlation between newly confirmed cases and new deaths.

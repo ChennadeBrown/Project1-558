@@ -65,23 +65,7 @@ tibble for our analysis.
 
 ``` r
 getCountryJsTb <- as_tibble(getCountryJs)
-getCountryJsTb
 ```
-
-    ## # A tibble: 32 x 10
-    ##    Country     CountryCode Province City  CityCode Lat   Lon   Cases Status Date 
-    ##    <chr>       <chr>       <chr>    <chr> <chr>    <chr> <chr> <int> <chr>  <chr>
-    ##  1 Switzerland CH          ""       ""    ""       46.82 8.23     27 confi~ 2020~
-    ##  2 Switzerland CH          ""       ""    ""       46.82 8.23     42 confi~ 2020~
-    ##  3 Switzerland CH          ""       ""    ""       46.82 8.23     56 confi~ 2020~
-    ##  4 Switzerland CH          ""       ""    ""       46.82 8.23     90 confi~ 2020~
-    ##  5 Switzerland CH          ""       ""    ""       46.82 8.23    114 confi~ 2020~
-    ##  6 Switzerland CH          ""       ""    ""       46.82 8.23    214 confi~ 2020~
-    ##  7 Switzerland CH          ""       ""    ""       46.82 8.23    268 confi~ 2020~
-    ##  8 Switzerland CH          ""       ""    ""       46.82 8.23    337 confi~ 2020~
-    ##  9 Switzerland CH          ""       ""    ""       46.82 8.23    374 confi~ 2020~
-    ## 10 Switzerland CH          ""       ""    ""       46.82 8.23    491 confi~ 2020~
-    ## # ... with 22 more rows
 
 ``` r
 getCountryJs2Tb <- as_tibble(getCountryJs2)
@@ -189,24 +173,7 @@ resp2Json <- fromJSON(resp2Text, flatten = TRUE)
 resp2Df <- as.data.frame(resp2Json$Countries)
 
 resp2Df$ID <- NULL
-resp2Df
 ```
-
-    ## # A tibble: 192 x 10
-    ##    Country   CountryCode Slug   NewConfirmed TotalConfirmed NewDeaths TotalDeaths
-    ##    <chr>     <chr>       <chr>         <int>          <int>     <int>       <int>
-    ##  1 Afghanis~ AF          afgha~            0         155191         0        7206
-    ##  2 Albania   AL          alban~            0         171794         0        2713
-    ##  3 Algeria   DZ          alger~            0         203789         0        5822
-    ##  4 Andorra   AD          andor~            0          15222         0         130
-    ##  5 Angola    AO          angola            0          58943         0        1577
-    ##  6 Antigua ~ AG          antig~            0           3503         0          85
-    ##  7 Argentina AR          argen~            0        5259738         0      115245
-    ##  8 Armenia   AM          armen~            0         264690         0        5372
-    ##  9 Australia AU          austr~         2023         113411        12        1346
-    ## 10 Austria   AT          austr~            0         748825         0       11026
-    ## # ... with 182 more rows, and 3 more variables: NewRecovered <int>,
-    ## #   TotalRecovered <int>, Date <chr>
 
 This function allows the user to return NewDeaths, TotalDeaths, &
 NewRecovered, or all of the data based on inputs from the Summary API.
@@ -331,11 +298,11 @@ ggplot(Combo, aes(x = Cases, y = Country)) +
 geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirmed Cases")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases
 confirmed for the two countries. The mean case count per day for Norway
-was 1,759 cases and the mean case count per day for Switzerland was
+was 1,760 cases and the mean case count per day for Switzerland was
 5,402 cases.
 
 ``` r
@@ -357,7 +324,7 @@ for Norway & Switzerland which were similar through March - April 2020.
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 The following contingency table reports the number of confirmed case
 statuses for South Africa and Mexico from the first recorded case which
@@ -381,7 +348,7 @@ the first recorded case.
 ggplot(Day1, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Cases Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases since
 Day 1 for Mexico and South Africa. Average cases for Mexico were
@@ -422,7 +389,7 @@ head(resp2Df) %>% select(Country, TotalDeaths, TotalConfirmed, Ratio)
 
 The following code returns numerical summaries for total deaths among
 all countries reported in the Summary API. The average total deaths was
-24,941.
+approximately 24K.
 
 ``` r
 resp2Df %>%
@@ -445,7 +412,7 @@ g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths",
 g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 20000, y = 200, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
 
 The following code creates a new variable which calculates new deaths to
 new confirmed cases for the countries in the summary data set. The ratio
@@ -487,7 +454,7 @@ in the 750,000 range.
 ggplot(data = resp2Df, aes(TotalConfirmed)) + geom_histogram(breaks = seq(20000, 900000, by = 50000), col = "blue", fill = "purple", alpha = .2) + labs(title = "Total Confirmed Cases for All Countries") + xlab("Total Confirmed")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 # Conclusion
 
