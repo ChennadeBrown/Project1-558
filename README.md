@@ -297,7 +297,7 @@ ggplot(Combo, aes(x = Cases, y = Country)) +
 geom_boxplot() + geom_jitter(aes(color = Status)) + ggtitle("Boxplot for Confirmed Cases")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases
 confirmed for the two countries. The mean case count per day for Norway
@@ -324,10 +324,12 @@ appears to report each day that had a confirmed case status.
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
 The following contingency table reports the number of confirmed case
-statuses for South Africa and Mexico returned from the Day 1 API.
+statuses for South Africa and Mexico returned from the Day 1 API. The
+count represents the number of days in which at least one confirmed case
+was reported.
 
 ``` r
 tbl2 <- table(Day1$Status, Day1$Country)
@@ -336,7 +338,7 @@ tbl2
 
     ##            
     ##             Mexico South Africa
-    ##   confirmed    585          580
+    ##   confirmed    586          581
 
 The following bar graph plots the output of the above contingency table
 which shows the confirmed case statuses for Mexico and South Africa from
@@ -346,7 +348,7 @@ the first recorded case. Case statuses were similar for each country.
 ggplot(Day1, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Cases Statuses")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-75-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 The following code calculates numerical summaries for daily cases since
 Day 1 for Mexico and South Africa. Average cases for Mexico were
@@ -361,8 +363,8 @@ Day1 %>%
     ## # A tibble: 2 x 5
     ##   Country           Avg       Sd   Median      IQR
     ##   <chr>           <dbl>    <dbl>    <dbl>    <dbl>
-    ## 1 Mexico       1433687. 1119976. 1277499  1997681 
-    ## 2 South Africa 1127981.  874799.  917200. 1148084.
+    ## 1 Mexico       1437528. 1122874. 1283398. 1998105.
+    ## 2 South Africa 1131045.  877160.  921922  1148632
 
 The following code creates a new variable (Ratio =
 TotalDeaths/TotalConfirmed) that represents the ratio of total deaths to
@@ -378,12 +380,12 @@ head(resp2Df) %>% select(Country, TotalDeaths, TotalConfirmed, Ratio)
     ## # A tibble: 6 x 4
     ##   Country             TotalDeaths TotalConfirmed   Ratio
     ##   <chr>                     <int>          <int>   <dbl>
-    ## 1 Afghanistan                7212         155287 0.0464 
-    ## 2 Albania                    2713         171794 0.0158 
-    ## 3 Algeria                    5826         203915 0.0286 
-    ## 4 Andorra                     130          15267 0.00852
-    ## 5 Angola                     1577          58943 0.0268 
-    ## 6 Antigua and Barbuda          85           3503 0.0243
+    ## 1 Afghanistan                7214         155309 0.0464 
+    ## 2 Albania                    2725         172618 0.0158 
+    ## 3 Algeria                    5831         204046 0.0286 
+    ## 4 Andorra                     130          15271 0.00851
+    ## 5 Angola                     1587          59895 0.0265 
+    ## 6 Antigua and Barbuda          85           3518 0.0242
 
 The following code returns numerical summaries for total deaths among
 all countries reported in the Summary API. The average total deaths was
@@ -397,7 +399,7 @@ resp2Df %>%
     ## # A tibble: 1 x 4
     ##      Avg    Max     Sd   Min
     ##    <dbl>  <int>  <dbl> <int>
-    ## 1 25031. 703278 81383.     0
+    ## 1 25070. 705194 81515.     0
 
 The following code returns a scatter plot for the summary data set. The
 plot shows there is minimal data on Newly Confirmed Cases and New
@@ -410,7 +412,7 @@ g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths",
 g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 125000, y = 50, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-79-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 The following code creates a new variable which calculates new deaths to
 new confirmed cases for the countries in the summary data set. The ratio
@@ -424,9 +426,9 @@ head(a) %>% select(Country, NewConfirmed, NewDeaths, Ratio)
 ```
 
     ## # A tibble: 1 x 4
-    ##   Country   NewConfirmed NewDeaths   Ratio
-    ##   <chr>            <int>     <int>   <dbl>
-    ## 1 Australia         2389        11 0.00460
+    ##   Country   NewConfirmed NewDeaths  Ratio
+    ##   <chr>            <int>     <int>  <dbl>
+    ## 1 Australia         2026        21 0.0104
 
 The following code will produce a histogram that displays the total
 confirmed cases for all countries included in the summary API. The
@@ -437,7 +439,7 @@ in the 750,000 range.
 ggplot(data = resp2Df, aes(TotalConfirmed)) + geom_histogram(breaks = seq(20000, 900000, by = 50000), col = "blue", fill = "purple", alpha = .2) + labs(title = "Total Confirmed Cases for All Countries") + xlab("Total Confirmed")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 # Conclusion
 

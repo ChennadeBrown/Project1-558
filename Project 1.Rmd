@@ -242,7 +242,7 @@ The following bar plot reports the number of confirmed cases for Norway & Switze
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
 
-The following contingency table reports the number of confirmed case statuses for South Africa and Mexico returned from the Day 1 API.  
+The following contingency table reports the number of confirmed case statuses for South Africa and Mexico returned from the Day 1 API.  The count represents the number of days in which at least one confirmed case was reported.  
 ```{r, echo = TRUE}
 tbl2 <- table(Day1$Status, Day1$Country)
 tbl2
