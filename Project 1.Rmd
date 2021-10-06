@@ -64,7 +64,7 @@ Combo$City <- NULL
 Combo$CityCode <- NULL
 ```
 
-The following functions will allow the user to query the Norway and Switzerland API by entering the column names or all.  To subset by rows the user can enter observations for the filter function.
+The following functions will allow the user to query the Norway and Switzerland API by entering the column names or all.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 ConfirmedSwiss <- function(type = "all"){
   OutputDatSwiss <- GET("https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z")
@@ -109,7 +109,7 @@ Day1$City <- NULL
 Day1$CityCode <- NULL
 ```
 
-These functions will allow the user to query the Day One Mexico and Day One South Africa APIs based on the columns by entering all or a column name.  To subset by rows the user can enter arguments for the filter function.
+These functions will allow the user to query the Day One Mexico and Day One South Africa APIs based on the columns by entering all or a column name.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 DayOneSa <- function(type = "all"){
   OutputDat <- GET("https://api.covid19api.com/dayone/country/south-africa/status/confirmed")
@@ -140,7 +140,7 @@ resp2Df <- as.data.frame(resp2Json$Countries)
 resp2Df$ID <- NULL
 ```
 
-This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all columns from the Summary API.  To subset by rows the user can enter arguments in the filter function.
+This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all columns from the Summary API.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 Summary <- function(type = "all"){
   OutputAPI <- GET("https://api.covid19api.com/summary")
@@ -166,7 +166,7 @@ LiveDf$Province <- NULL
 LiveDf$City <- NULL
 LiveDf$CityCode <- NULL
 ```
-The following function will allow the user to query live cases for Greece by columns.  To subset by rows the user can enter arguments in the filter function.
+The following function will allow the user to query live cases for Greece by columns.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, results = 'hide', eval = FALSE}
 Live2 <- function(type = "all"){
   OutputLive2 <- GET("https://api.covid19api.com/live/country/greece/status/confirmed/date/2020-03-21T13:13:30Z")
@@ -186,7 +186,7 @@ OneTextJson <- fromJSON(OneText, flatten = TRUE)
 OneDf <- as.data.frame(OneTextJson)
 ```
 
-The following function will allow the user to query day one cases for Denmark by columns.  To subset the rows the user can enter arguments in the filter function.
+The following function will allow the user to query day one cases for Denmark by columns.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, eval = FALSE}
 OneFun <- function(type = "all"){
   OutputOneFun <- GET("https://api.covid19api.com/total/dayone/country/denmark/status/confirmed")
@@ -205,7 +205,7 @@ CtryTextJson <- fromJSON(CtryText, flatten = TRUE)
 # Save the data frame as CtryDf.
 CtryDf <- as.data.frame(CtryTextJson)
 ```
-The following function will allow the user to query the Countries API by column.  To subset by rows the user can enter arguments in the filter function.
+The following function will allow the user to query the Countries API by column.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, results = 'hide', eval = FALSE}
 CtryFun <- function(type = "all"){
   OutputCtryFun <- GET("https://api.covid19api.com/countries")
@@ -277,7 +277,7 @@ The following code returns a scatter plot for the summary data set.  The plot sh
 ```{r, echo = TRUE}
 correlation <- cor(resp2Df$NewConfirmed, resp2Df$NewDeaths)
 g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths", x = "New Confirmed Cases")
-g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 50000, y = 50, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
+g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 20000, y = 50, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
 The following code creates a new variable which calculates new deaths to new confirmed cases for the countries in the summary data set. The ratio of new deaths to confirmed cases was less than 1% for Australia.. 
