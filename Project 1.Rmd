@@ -277,7 +277,7 @@ The following code returns a scatter plot for the summary data set.  The plot sh
 ```{r, echo = TRUE}
 correlation <- cor(resp2Df$NewConfirmed, resp2Df$NewDeaths)
 g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths", x = "New Confirmed Cases")
-g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 125000, y = 50, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
+g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 50000, y = 50, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
 The following code creates a new variable which calculates new deaths to new confirmed cases for the countries in the summary data set. The ratio of new deaths to confirmed cases was less than 1% for Australia.. 
@@ -290,7 +290,7 @@ head(a) %>% select(Country, NewConfirmed, NewDeaths, Ratio)
 
 The following code will produce a histogram that displays the total confirmed cases for all countries included in the summary API. The highest frequency of cases was between 50,000 and 250,000 leveling off in the 750,000 range.
 ```{r, echo = TRUE}
-ggplot(data = resp2Df, aes(TotalConfirmed)) + geom_histogram(breaks = seq(20000, 900000, by = 50000), col = "blue", fill = "purple", alpha = .2) + labs(title = "Total Confirmed Cases for All Countries") + xlab("Total Confirmed")
+ggplot(data = resp2Df, aes(TotalConfirmed)) + geom_histogram(breaks = seq(20000, 900000, by = 70000), col = "blue", fill = "purple", alpha = .2) + labs(title = "Total Confirmed Cases for All Countries") + xlab("Total Confirmed")
 ```
 
 # Conclusion
