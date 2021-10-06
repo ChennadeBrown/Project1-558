@@ -40,7 +40,7 @@ getCountryText <- content(getCountry, "text")
 getCountryText2 <- content(getCountry2, "text")
 ```
 
-We will now covert the raw data into JSON format which will allow us to PARSE the data and output a data frame using the jsonlite package.
+We will now covert the raw data into JSON format which will allow us to parse the data and output a data frame using the jsonlite package.
 ```{r, echo = TRUE}
 getCountryJs <- fromJSON(getCountryText, flatten = TRUE)
 getCountryJs2 <- fromJSON(getCountryText2, flatten = TRUE)
