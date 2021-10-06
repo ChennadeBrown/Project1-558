@@ -64,7 +64,7 @@ Combo$City <- NULL
 Combo$CityCode <- NULL
 ```
 
-The following functions will allow the user to query the Norway and Switzerland API by entering the column names or all.  To subset by rows the user can enter the column name and row to be selected in the filter function.
+The following functions will allow the user to query the Norway and Switzerland API by columns by entering the column names or all.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 ConfirmedSwiss <- function(type = "all"){
   OutputDatSwiss <- GET("https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z")
@@ -109,7 +109,7 @@ Day1$City <- NULL
 Day1$CityCode <- NULL
 ```
 
-These functions will allow the user to query the Day One Mexico and Day One South Africa APIs based on the columns by entering all or a column name.  To subset by rows the user can enter the column name and row to be selected in the filter function.
+These functions will allow the user to query the Day One Mexico and Day One South Africa APIs by columns by entering all or a column name.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 DayOneSa <- function(type = "all"){
   OutputDat <- GET("https://api.covid19api.com/dayone/country/south-africa/status/confirmed")
@@ -140,7 +140,7 @@ resp2Df <- as.data.frame(resp2Json$Countries)
 resp2Df$ID <- NULL
 ```
 
-This function allows the user to return NewDeaths, TotalDeaths, & NewRecovered, or all columns from the Summary API.  To subset by rows the user can enter the column name and row to be selected in the filter function.
+This function allows the user to query the Summary API by columns by entering the column name or all.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, message = FALSE, results = 'hide'}
 Summary <- function(type = "all"){
   OutputAPI <- GET("https://api.covid19api.com/summary")
@@ -148,7 +148,7 @@ Summary <- function(type = "all"){
     data2 <- data$Countries
   if(type!="all"){data2 <- data2 %>% select(type, Country, CountryCode,  NewDeaths, TotalDeaths, NewRecovered) %>% filter(Country == "Afghanistan")}
   return(data2)}
-Summary("Country")
+Summary("all")
 ```
 
 The next set of functions will return live cases by case type for a country after a given date. This particular endpoint returns cases for Greece.
@@ -166,7 +166,7 @@ LiveDf$Province <- NULL
 LiveDf$City <- NULL
 LiveDf$CityCode <- NULL
 ```
-The following function will allow the user to query live cases for Greece by columns.  To subset by rows the user can enter the column name and row to be selected in the filter function.
+The following function will allow the user to query live cases for Greece by columns by entering the column name or all.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, results = 'hide', eval = FALSE}
 Live2 <- function(type = "all"){
   OutputLive2 <- GET("https://api.covid19api.com/live/country/greece/status/confirmed/date/2020-03-21T13:13:30Z")
@@ -186,7 +186,7 @@ OneTextJson <- fromJSON(OneText, flatten = TRUE)
 OneDf <- as.data.frame(OneTextJson)
 ```
 
-The following function will allow the user to query day one cases for Denmark by columns.  To subset by rows the user can enter the column name and row to be selected in the filter function.
+The following function will allow the user to query day one cases for Denmark by columns by entering the column name or all.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, eval = FALSE}
 OneFun <- function(type = "all"){
   OutputOneFun <- GET("https://api.covid19api.com/total/dayone/country/denmark/status/confirmed")
@@ -205,7 +205,7 @@ CtryTextJson <- fromJSON(CtryText, flatten = TRUE)
 # Save the data frame as CtryDf.
 CtryDf <- as.data.frame(CtryTextJson)
 ```
-The following function will allow the user to query the Countries API by column.  To subset by rows the user can enter the column name and row to be selected in the filter function.
+The following function will allow the user to query the Countries API by column by entering the column name or all.  To subset by rows the user can enter the column name and row to be selected in the filter function.
 ```{r, echo = TRUE, results = 'hide', eval = FALSE}
 CtryFun <- function(type = "all"){
   OutputCtryFun <- GET("https://api.covid19api.com/countries")
