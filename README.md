@@ -33,9 +33,9 @@ library(dplyr)
 
 # Accessing the Data
 
-First we will access data from the API regarding confirmed Covid 19
-Cases for Norway and Switzerland during the time frame from March 1,
-2020 - April 1, 2020 for comparison. This will be achieved using the GET
+First we will access data from the API regarding confirmed Covid19 cases
+for Norway and Switzerland during the time frame from March 1, 2020 -
+April 1, 2020 for comparison. This will be achieved using the GET
 function from the `httr` package to return information from the API.
 
 ``` r
