@@ -280,7 +280,7 @@ g <- ggplot(resp2Df, aes(x = NewConfirmed, y = NewDeaths))+ labs(y="New Deaths",
 g + geom_point(col = "Red") + ggtitle("New Confirmed Cases vs New Deaths") + geom_text(x = 75000, y = 50, size = 5, label = paste0("Correlation = ", round(correlation, 2)))
 ```
 
-The following code creates a new variable which calculates new deaths to new confirmed cases for the countries in the summary data set. The ratio of new deaths to confirmed cases was less than 1% for Australia.. 
+The following code creates a new variable which calculates new deaths to new confirmed cases for the countries in the summary data set. The ratio of new deaths to confirmed cases was less than 1% for Australia. 
 ```{r, echo = TRUE}
 resp2Df <- resp2Df %>% mutate(Ratio = NewDeaths/NewConfirmed)
 a <- filter(resp2Df, Country == "Australia")
