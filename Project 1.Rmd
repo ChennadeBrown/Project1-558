@@ -26,7 +26,7 @@ library(dplyr)
 ```
 
 # Accessing the Data
-First we will access data from the API regarding confirmed Covid19 cases for Norway and Switzerland during the time frame from March 1, 2020 - April 1, 2020 for comparison.  This will be achieved using the GET function from the `httr` package to return information from the API.
+First we will access data from the API regarding confirmed Covid19 cases for Norway and Switzerland during the time frame from March 1, 2020 - April 1, 2020 for comparison.  This will be achieved using the GET function from the httr package to return information from the API.
 ```{r, echo = TRUE, message = FALSE}
 getCountry <- GET("https://api.covid19api.com/country/Switzerland/status/confirmed?from=2020-03-01T00:00:00Z&to=2020-04-01T00:00:00Z")
 
