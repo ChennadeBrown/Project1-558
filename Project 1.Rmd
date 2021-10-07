@@ -237,7 +237,7 @@ Combo %>%
   summarize(Avg = mean(Cases), Sd = sd(Cases), Median = median(Cases), IQR =    IQR(Cases))
 ```
 
-The following bar plot reports the number of confirmed cases for Norway & Switzerland which were similar through March - April 2020.  The data appears to report each day that had a confirmed case status.
+The following bar plot reports the number of confirmed case statuses for Norway & Switzerland which were similar through March - April 2020.  The data appears to report each day that had a confirmed case status.
 ```{r, echo = TRUE}
 ggplot(Combo, aes(x = Country)) + geom_bar(aes(fill = Status), position = "dodge") + xlab("Country") + scale_fill_discrete(name = "") + ggtitle("Confirmed Case Statuses")
 ```
