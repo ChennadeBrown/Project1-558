@@ -52,7 +52,7 @@ getCountryText <- content(getCountry, "text")
 getCountryText2 <- content(getCountry2, "text")
 ```
 
-We will now covert the raw data into JSON format which will allow us to
+We will now convert the raw data into JSON format which will allow us to
 parse the data and output a data frame using the jsonlite package.
 
 ``` r
